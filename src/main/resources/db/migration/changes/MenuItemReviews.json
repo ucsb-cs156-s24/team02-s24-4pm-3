@@ -1,0 +1,73 @@
+{ "databaseChangeLog": [
+  {
+    "changeSet": {
+      "id": "MenuItemReviews-1",
+      "author": "MikeJ",
+      "preConditions": [
+        {
+          "onFail": "MARK_RAN",
+          "not": {
+            "tableExists": {
+              "tableName": "MenuItemReviews"
+            }
+          }
+        }
+      ],
+      "changes": [
+        {
+          "createTable": {
+            "columns": [
+              {
+                "column": {
+                  "constraints": {
+                    "primaryKey": true,
+                    "primaryKeyName": "PK_MenuItemReviews"
+                  },
+                  "name": "id",
+                  "type": "BIGINT(225)"
+                }
+              },
+              {
+                "column": {
+                  "constraints": {
+                    "nullable": false
+                  },
+                  "name": "itemId",
+                  "type": "BIGINT(225)"
+                }
+              },
+              {
+                "column": {
+                  "constraints": {
+                    "nullable": false
+                  },
+                  "name": "reviewerEmail",
+                  "type": "VARCHAR(255)"
+                }
+              },
+              {
+                "column": {
+                  "constraints": {
+                    "nullable": false
+                  },
+                  "name": "stars",
+                  "type": "SMALLINT(1)"
+                }
+              },
+              {
+                "column": {
+                  "constraints": {
+                    "nullable": false
+                  },
+                  "name": "review",
+                  "type": "VARCHAR(255)"
+                }
+
+              }],
+            "tableName": "MenuItemReviews"
+          }
+        }]
+
+    }
+  }
+]}
