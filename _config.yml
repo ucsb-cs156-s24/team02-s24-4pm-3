@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s24/team02-s24-4pm-3
 owner: ucsb-cs156-s24
 repo_name: team02-s24-4pm-3
-pull_requests: [{"author":{"id":"MDQ6VXNlcjMzMzMzNDUz","is_bot":false,"login":"a-k-u-m-a-r","name":"Akshay Kumar"},"headRefName":"Akshay-TeamLink","number":44,"title":"Update readme with team02 dokku dev link","url":"https://github.com/ucsb-cs156-s24/team02-s24-4pm-3/pull/44"},{"author":{"id":"MDQ6VXNlcjQyOTg1Njg3","is_bot":false,"login":"ericpretzel","name":"Eric W"},"headRefName":"Eric-README","number":43,"title":"Add table to README.md","url":"https://github.com/ucsb-cs156-s24/team02-s24-4pm-3/pull/43"}]
+pull_requests: [{"author":{"id":"MDQ6VXNlcjMzMzMzNDUz","is_bot":false,"login":"a-k-u-m-a-r","name":"Akshay Kumar"},"headRefName":"Akshay-TeamLink","number":44,"title":"Update readme with team02 dokku dev link","url":"https://github.com/ucsb-cs156-s24/team02-s24-4pm-3/pull/44"}]
