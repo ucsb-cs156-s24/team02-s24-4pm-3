@@ -1,6 +1,5 @@
 # team02-s24-4pm-3
 
-
 | Table                       | Team Member | Github Id     |
 |-----------------------------|-------------|---------------|
 | `UCSBDiningCommonsMenuItem` | Kevin C     | KevinChen0527 |
@@ -17,8 +16,8 @@ TODO: Add a link to the deployed Dokku app for your team here, e.g.
 
 Deployments:
 
-* Prod: <https://team02.dokku-17.cs.ucsb.edu>
-* QA: <https://team02-qa.dokku-17.cs.ucsb.edu>
+* Prod: [https://team02.dokku-03.cs.ucsb.edu/](https://team02.dokku-03.cs.ucsb.edu/)
+* QA: <Todo>
 
 # Setup before running application
 
