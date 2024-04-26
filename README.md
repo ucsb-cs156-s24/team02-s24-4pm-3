@@ -1,6 +1,18 @@
-team02-s24-4pm-3
+# team02-s24-4pm-3
+
+| Table                       | Team Member | Github Id     |
+|-----------------------------|-------------|---------------|
+| `UCSBDiningCommonsMenuItem` | Kevin C     | KevinChen0527 |
+| `UCSBOrganization`          | Kevin L     | coder626      |
+| `RecommendationRequest`     | Akshay      | a-k-u-m-a-r   |
+| `MenuItemReview`            | Mike        | MeDotE        |
+| `HelpRequest`               | Eric        | ericpretzel   |
+| `Articles`                  | Tim         | tim-choi      |
+
 
 Instructions: <https://ucsb-cs156.github.io/s24/lab/team02.html>
+
+TODO: Add a link to the deployed Dokku app for your team here, e.g.
 
 Deployments:
 
