@@ -2,6 +2,7 @@
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import edu.ucsb.cs156.example.entities.HelpRequest;
+import edu.ucsb.cs156.example.errors.EntityNotFoundException;
 import edu.ucsb.cs156.example.repositories.HelpRequestRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -17,8 +18,8 @@ import java.time.LocalDateTime;
 @Tag(name = &quot;HelpRequests&quot;)
 @RequestMapping(&quot;/api/helprequests&quot;)
 @RestController
-<span class="fc" id="L20">@Slf4j</span>
-<span class="fc" id="L21">public class HelpRequestsController {</span>
+<span class="fc" id="L21">@Slf4j</span>
+<span class="fc" id="L22">public class HelpRequestsController extends ApiController {</span>
 
     @Autowired
     HelpRequestRepository helpRequestRepository;
@@ -27,7 +28,16 @@ import java.time.LocalDateTime;
     @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
     @GetMapping(&quot;/all&quot;)
     public Iterable&lt;HelpRequest&gt; allHelpRequests() {
-<span class="fc" id="L30">        return helpRequestRepository.findAll();</span>
+<span class="fc" id="L31">        return helpRequestRepository.findAll();</span>
+    }
+
+    @Operation(summary= &quot;Get a single help request&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
+    @GetMapping(&quot;&quot;)
+    public HelpRequest getById(
+            @Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L39">        return helpRequestRepository.findById(id)</span>
+<span class="fc" id="L40">                .orElseThrow(() -&gt; new EntityNotFoundException(HelpRequest.class, id));</span>
     }
 
     @Operation(summary = &quot;Create a new help request&quot;)
@@ -37,19 +47,19 @@ import java.time.LocalDateTime;
             @Parameter(name=&quot;requesterEmail&quot;) @RequestParam String requesterEmail,
             @Parameter(name=&quot;teamId&quot;) @RequestParam String teamId,
             @Parameter(name=&quot;tableOrBreakoutRoom&quot;) @RequestParam String tableOrBreakoutRoom,
-            @Parameter(name=&quot;requestTime&quot;, description = &quot;in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601)&quot;) @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime requestTime,
+            @Parameter(name=&quot;requestTime&quot;, description = &quot;in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601&quot;) @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime requestTime,
             @Parameter(name=&quot;explanation&quot;) @RequestParam String explanation,
             @Parameter(name=&quot;solved&quot;) @RequestParam boolean solved
     ) throws JsonProcessingException {
-<span class="fc" id="L44">        var helpRequest = HelpRequest.builder()</span>
-<span class="fc" id="L45">                .requesterEmail(requesterEmail)</span>
-<span class="fc" id="L46">                .teamId(teamId)</span>
-<span class="fc" id="L47">                .tableOrBreakoutRoom(tableOrBreakoutRoom)</span>
-<span class="fc" id="L48">                .requestTime(requestTime)</span>
-<span class="fc" id="L49">                .explanation(explanation)</span>
-<span class="fc" id="L50">                .solved(solved)</span>
-<span class="fc" id="L51">                .build();</span>
-<span class="fc" id="L52">        return helpRequestRepository.save(helpRequest);</span>
+<span class="fc" id="L54">        var helpRequest = HelpRequest.builder()</span>
+<span class="fc" id="L55">                .requesterEmail(requesterEmail)</span>
+<span class="fc" id="L56">                .teamId(teamId)</span>
+<span class="fc" id="L57">                .tableOrBreakoutRoom(tableOrBreakoutRoom)</span>
+<span class="fc" id="L58">                .requestTime(requestTime)</span>
+<span class="fc" id="L59">                .explanation(explanation)</span>
+<span class="fc" id="L60">                .solved(solved)</span>
+<span class="fc" id="L61">                .build();</span>
+<span class="fc" id="L62">        return helpRequestRepository.save(helpRequest);</span>
     }
 
 
