@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 
@@ -70,7 +71,7 @@ public class UCSBDiningCommonsMenuItemsController extends ApiController {
         return ucsbDiningCommonsMenuItems;
     }
 
-    @Operation(summary= "Deletes a single menu item")
+    @Operation(summary= "Deletes a menu item")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("")
     public Object deleteUCSBDiningCommonsMenuItem(
@@ -80,5 +81,24 @@ public class UCSBDiningCommonsMenuItemsController extends ApiController {
 
         ucsbDiningCommonsMenuItemsRepository.delete(ucsbDiningCommonsMenuItem);
         return genericMessage("UCSBDiningCommonsMenuItem %s deleted".formatted(id));
+    }
+
+    @Operation(summary= "Gets a single menu item then updates it")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public UCSBDiningCommonsMenuItems updateUCSBDiningCommonsMenuItem(
+            @Parameter(name="id") @RequestParam Long id,
+            @RequestBody @Valid UCSBDiningCommonsMenuItems updatedMenuItem) {
+
+        UCSBDiningCommonsMenuItems ucsbDiningCommonsMenuItem = ucsbDiningCommonsMenuItemsRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItems.class, id));
+
+        ucsbDiningCommonsMenuItem.setDiningCommonsCode(updatedMenuItem.getDiningCommonsCode());
+        ucsbDiningCommonsMenuItem.setName(updatedMenuItem.getName());
+        ucsbDiningCommonsMenuItem.setStation(updatedMenuItem.getStation());
+
+        ucsbDiningCommonsMenuItemsRepository.save(ucsbDiningCommonsMenuItem);
+
+        return ucsbDiningCommonsMenuItem;
     }
 }
