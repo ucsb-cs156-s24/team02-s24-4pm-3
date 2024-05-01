@@ -65,20 +65,20 @@ public class MenuItemReviewControllerTests extends ControllerTestCase{
         // arrange
         LocalDateTime ldt1 = LocalDateTime.parse("2022-01-03T00:00:00");
         MenuItemReview review1 = MenuItemReview.builder()
-                .itemId((long)1)
+                .itemId(1)
                 .reviewerEmail("ucsbstudent1@ucsb.edu")
-                .stars((short) 5)
-                .comment("I hecking loved it!")
+                .stars(5)
                 .dateReviewed(ldt1)
+                .comment("I hecking loved it!")
                 .build();
 
         LocalDateTime ldt2 = LocalDateTime.parse("2022-03-11T00:00:00");
         MenuItemReview review2 = MenuItemReview.builder()
-                .itemId((long)5)
+                .itemId(5)
                 .reviewerEmail("ucsbstudent2@ucsb.edu")
-                .stars((short) 1)
-                .comment("this shit sucks, boo!")
+                .stars(1)
                 .dateReviewed(ldt2)
+                .comment("this shit sucks, boo!")
                 .build();
 
         ArrayList<MenuItemReview> expectedReviews = new ArrayList<>();
@@ -121,20 +121,18 @@ public class MenuItemReviewControllerTests extends ControllerTestCase{
         LocalDateTime ldt1 = LocalDateTime.parse("2024-01-03T00:00:00");
 
         MenuItemReview review1 = MenuItemReview.builder()
-                .itemId((long)1)
-                .reviewerEmail("ucsbstudent1@ucsb.edu")
-                .stars((short) 5)
-                .comment("I hecking loved it!")
+                .itemId(1)
+                .reviewerEmail("email")
+                .stars(5)
                 .dateReviewed(ldt1)
+                .comment("good")
                 .build();
 
         when(menuItemReviewRepository.save(eq(review1))).thenReturn(review1);
 
         // act
-        MvcResult response = mockMvc.perform(
-                        post("/api/menuitemreview/post?itemId=1&reviewerEmail=ucsbstudent1@ucsb.edu&stars=5&comment=I hecking loved it!&localDateTime=2024-01-03T00:00:00")
-                                .with(csrf()))
-                .andExpect(status().isOk()).andReturn();
+        String URL = "/api/menuitemreview/post?itemId=1&reviewerEmail=email&stars=5&dateReviewed=2024-01-03T00:00:00&comment=good";
+        MvcResult response = mockMvc.perform( post(URL).with( csrf() )).andExpect( status().isOk() ).andReturn();
 
         // assert
         verify(menuItemReviewRepository, times(1)).save(review1);

@@ -48,7 +48,7 @@ public class MenuItemReviewController extends ApiController{
     public MenuItemReview postMenuItemReview(
             @Parameter(name="itemId") @RequestParam long itemId,
             @Parameter(name="reviewerEmail") @RequestParam String reviewerEmail,
-            @Parameter(name="stars") @RequestParam short stars,
+            @Parameter(name="stars") @RequestParam int stars,
             @Parameter(name="dateReviewed", description="date in in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601") @RequestParam("dateReviewed") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateReviewed,
             @Parameter(name="comment") @RequestParam String comment)
             throws JsonProcessingException {
