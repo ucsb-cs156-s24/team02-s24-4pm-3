@@ -1,18 +1,10 @@
 package edu.ucsb.cs156.example.controllers;
 
+import edu.ucsb.cs156.example.ControllerTestCase;
 import edu.ucsb.cs156.example.entities.HelpRequest;
 import edu.ucsb.cs156.example.repositories.HelpRequestRepository;
 import edu.ucsb.cs156.example.repositories.UserRepository;
 import edu.ucsb.cs156.example.testconfig.TestConfig;
-import edu.ucsb.cs156.example.ControllerTestCase;
-import edu.ucsb.cs156.example.entities.UCSBDate;
-import edu.ucsb.cs156.example.repositories.UCSBDateRepository;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,20 +13,18 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MvcResult;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 @WebMvcTest(controllers = HelpRequestsController.class)
 @Import(TestConfig.class)
 public class HelpRequestsControllerTests extends ControllerTestCase {
@@ -211,5 +201,81 @@ public class HelpRequestsControllerTests extends ControllerTestCase {
 
     // End tests for GET /api/helprequests?id=...
 
+    // Begin tests for PUT /api/helprequests?id=...
+    @WithMockUser(roles = { "ADMIN", "USER" })
+    @Test
+    public void admin_can_edit_an_existing_helprequest() throws Exception {
+        // arrange
 
+        var helpRequestOrig = HelpRequest.builder()
+                .requesterEmail("ewetzel@ucsb.edu")
+                .requestTime(LocalDateTime.parse("2022-01-03T00:00:00"))
+                .explanation("I can't find my glasses")
+                .tableOrBreakoutRoom("table 3")
+                .teamId("s24-4pm-3")
+                .solved(false)
+                .build();
+
+        var helpRequestEdited = HelpRequest.builder()
+                .requesterEmail("pconrad@ucsb.edu")
+                .requestTime(LocalDateTime.parse("2023-01-03T00:00:00"))
+                .explanation("I found my glasses")
+                .tableOrBreakoutRoom("table 4")
+                .teamId("s24-4pm-4")
+                .solved(true)
+                .build();
+
+        String requestBody = mapper.writeValueAsString(helpRequestEdited);
+
+        when(helpRequestRepository.findById(eq(67L))).thenReturn(Optional.of(helpRequestOrig));
+
+        // act
+        MvcResult response = mockMvc.perform(
+                        put("/api/helprequests?id=67")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .content(requestBody)
+                                .with(csrf()))
+                .andExpect(status().isOk()).andReturn();
+
+        // assert
+        verify(helpRequestRepository, times(1)).findById(67L);
+        verify(helpRequestRepository, times(1)).save(helpRequestEdited); // solved should be set to true
+        String responseString = response.getResponse().getContentAsString();
+        assertEquals(requestBody, responseString);
+    }
+
+
+    @WithMockUser(roles = { "ADMIN", "USER" })
+    @Test
+    public void admin_cannot_edit_helprequest_that_does_not_exist() throws Exception {
+        // arrange
+
+        var helpRequestEdited = HelpRequest.builder()
+                .requesterEmail("ewetzel@ucsb.edu")
+                .requestTime(LocalDateTime.parse("2022-01-03T00:00:00"))
+                .explanation("I can't find my glasses")
+                .tableOrBreakoutRoom("table 3")
+                .teamId("s24-4pm-3")
+                .solved(true)
+                .build();
+
+        String requestBody = mapper.writeValueAsString(helpRequestEdited);
+
+        when(helpRequestRepository.findById(eq(67L))).thenReturn(Optional.empty());
+
+        // act
+        MvcResult response = mockMvc.perform(
+                        put("/api/helprequests?id=67")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .characterEncoding("utf-8")
+                                .content(requestBody)
+                                .with(csrf()))
+                .andExpect(status().isNotFound()).andReturn();
+
+        // assert
+        verify(helpRequestRepository, times(1)).findById(67L);
+        Map<String, Object> json = responseToJson(response);
+        assertEquals("HelpRequest with id 67 not found", json.get("message"));
+    }
 }
