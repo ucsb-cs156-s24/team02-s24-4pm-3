@@ -19,7 +19,8 @@ import java.time.LocalDateTime;
 public class MenuItemReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // unique id for each review
+    private long id; // unique id for each review
+
     private long itemId; // unique id for each menu item
     private String reviewerEmail; // email of the reviewer
     private short stars; // number of stars given to the menu item (0 to 5)
