@@ -35,7 +35,7 @@ public class MenuItemReviewController extends ApiController{
     @Autowired
     MenuItemReviewRepository menuItemReviewRepository;
 
-    @Operation(summary= "Lists all the reviews for a menu item")
+    @Operation(summary= "Lists all the reviews in the database")
     @PreAuthorize("hasRole('ROLE_USER')")
     @GetMapping("/all")
     public Iterable<MenuItemReview> allReviews() {
@@ -49,27 +49,21 @@ public class MenuItemReviewController extends ApiController{
             @Parameter(name="itemId") @RequestParam long itemId,
             @Parameter(name="reviewerEmail") @RequestParam String reviewerEmail,
             @Parameter(name="stars") @RequestParam short stars,
-            @Parameter(name="comment") @RequestParam String comment,
-            @Parameter(name="date (in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601)") @RequestParam("localDateTime") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime localDateTime)
+            @Parameter(name="dateReviewed", description="date in in iso format, e.g. YYYY-mm-ddTHH:MM:SS; see https://en.wikipedia.org/wiki/ISO_8601") @RequestParam("dateReviewed") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateReviewed,
+            @Parameter(name="comment") @RequestParam String comment)
             throws JsonProcessingException {
+                // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                // See: https://www.baeldung.com/spring-date-parameters
 
-        // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-        // See: https://www.baeldung.com/spring-date-parameters
+                log.info("dateReviewed={}", dateReviewed);
 
-        log.info("localDateTime={}", localDateTime);
+                MenuItemReview menuItemReview = new MenuItemReview();
+                menuItemReview.setItemId(itemId);
+                menuItemReview.setReviewerEmail(reviewerEmail);
+                menuItemReview.setStars(stars);
+                menuItemReview.setDateReviewed(dateReviewed);
+                menuItemReview.setComment(comment);
 
-        MenuItemReview menuItemReview = new MenuItemReview();
-        menuItemReview.setItemId(itemId);
-        menuItemReview.setReviewerEmail(reviewerEmail);
-        menuItemReview.setStars(stars);
-        menuItemReview.setDateReviewed(localDateTime);
-        menuItemReview.setComment(comment);
-
-        MenuItemReview savedMenuItemReview = menuItemReviewRepository.save(menuItemReview);
-
-        return savedMenuItemReview;
-    }
-
-
-
+                return menuItemReviewRepository.save(menuItemReview);
+            }
 }

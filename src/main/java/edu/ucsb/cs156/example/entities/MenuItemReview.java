@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Entity(name = "menuitemreview")
+@Entity(name = "menuitemreviews")
 public class MenuItemReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
