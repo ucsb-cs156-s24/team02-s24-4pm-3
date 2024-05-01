@@ -91,4 +91,26 @@ public class RecommendationRequestController extends ApiController {
             .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
             return recRequest; 
     }
+
+    @Operation(summary= "Update a single request")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PutMapping("")
+    public RecommendationRequest updateRecommendationRequest(
+            @Parameter(name="id") @RequestParam Long id,
+            @RequestBody @Valid RecommendationRequest incoming) {
+
+                RecommendationRequest rr = recommendationRequestRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(RecommendationRequest.class, id));
+
+        rr.setRequesterEmail(incoming.getRequesterEmail());
+        rr.setProfessorEmail(incoming.getProfessorEmail());
+        rr.setExplanation(incoming.getExplanation());
+        rr.setDateRequested(incoming.getDateRequested());
+        rr.setDateNeeded(incoming.getDateNeeded());
+        rr.setDone(incoming.getDone());
+        
+        recommendationRequestRepository.save(rr);
+
+        return rr;
+    }
 }
