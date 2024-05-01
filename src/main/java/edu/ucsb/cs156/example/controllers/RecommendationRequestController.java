@@ -50,20 +50,18 @@ public class RecommendationRequestController {
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/post")
     public RecommendationRequest postRecommendationRequest(
-            @Parameter(name="id") @RequestParam long id,
-            @Parameter(name="requesterEmail") @RequestParam String requesterEmail,
-            @Parameter(name="professorEmail") @RequestParam String professorEmail,
-            @Parameter(name="explanation") @RequestParam String explanation,
-            @Parameter(name="dateRequested") @RequestParam("dateRequested") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateRequested,
-            @Parameter(name="dateNeeded") @RequestParam("dateNeeded") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateNeeded,
-            @Parameter(name="done") @RequestParam Boolean done)
-            throws JsonProcessingException {
+        @Parameter(name="requesterEmail") @RequestParam String requesterEmail,
+        @Parameter(name="professorEmail") @RequestParam String professorEmail,
+        @Parameter(name="explanation") @RequestParam String explanation,
+        @Parameter(name="dateRequested") @RequestParam("dateRequested") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateRequested,
+        @Parameter(name="dateNeeded") @RequestParam("dateNeeded") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateNeeded,
+        @Parameter(name="done") @RequestParam Boolean done)
+        throws JsonProcessingException {
 
         // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
         // See: https://www.baeldung.com/spring-date-parameters
 
         RecommendationRequest recommendationRequest = new RecommendationRequest();
-        recommendationRequest.setId(id);
         recommendationRequest.setRequesterEmail(requesterEmail);
         recommendationRequest.setProfessorEmail(professorEmail);
         recommendationRequest.setExplanation(explanation);
