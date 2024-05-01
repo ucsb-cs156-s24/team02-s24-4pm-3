@@ -58,4 +58,15 @@ public class UCSBDiningCommonsMenuItemsController extends ApiController {
 
         return newUcsbDiningCommonsMenuItem;
     }
+
+    @Operation(summary= "Gets a single menu item")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    @GetMapping("")
+    public UCSBDiningCommonsMenuItems getById(
+            @Parameter(name="id") @RequestParam Long id) {
+        UCSBDiningCommonsMenuItems ucsbDiningCommonsMenuItems = ucsbDiningCommonsMenuItemsRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException(UCSBDiningCommonsMenuItems.class, id));
+
+        return ucsbDiningCommonsMenuItems;
+    }
 }
