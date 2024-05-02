@@ -303,32 +303,7 @@
         </configuration>
       </plugin>
 
-      <plugin>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-maven-plugin</artifactId>
-            <version>3.8.0</version>
-            <configuration>
-                <propertyFile>liquibase.properties</propertyFile>
-                <!-- Adjust the path to your Liquibase changelog file -->
-                <changeLogFile>src/main/resources/db/migration/changelog-master.json</changeLogFile>
-            </configuration>
-            <executions>
-                <execution>
-                    <id>liquibase-update</id>
-                    <phase>process-resources</phase>
-                    <goals>
-                        <goal>update</goal>
-                    </goals>
-                </execution>
-                <execution>
-                    <id>liquibase-dropAll</id>
-                    <phase>initialize</phase>
-                    <goals>
-                        <goal>dropAll</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
+      
 
     </plugins>
   </build>
