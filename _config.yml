@@ -23,4 +23,4 @@ repo_name: "TBD"
 repo: ucsb-cs156-s24/team02-s24-4pm-3
 owner: ucsb-cs156-s24
 repo_name: team02-s24-4pm-3
-pull_requests: []
+pull_requests: [{"author":{"id":"MDQ6VXNlcjkxMzQyOTk2","is_bot":false,"login":"MeDotE","name":"Mike Jiang"},"headRefName":"hotfix-1","number":74,"title":"mj - fixed Aritcle date thingy","url":"https://github.com/ucsb-cs156-s24/team02-s24-4pm-3/pull/74"}]
