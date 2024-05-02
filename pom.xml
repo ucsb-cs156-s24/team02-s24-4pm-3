@@ -301,6 +301,22 @@
         <configuration>
           <propertyFile>liquibase.properties</propertyFile>
         </configuration>
+        <executions>
+                <execution>
+                    <id>liquibase-update</id>
+                    <phase>process-resources</phase>
+                    <goals>
+                        <goal>update</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>liquibase-dropAll</id>
+                    <phase>initialize</phase>
+                    <goals>
+                        <goal>dropAll</goal>
+                    </goals>
+                </execution>
+            </executions>
       </plugin>
 
       
