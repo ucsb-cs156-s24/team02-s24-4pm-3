@@ -15,20 +15,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 
 @Tag(name = &quot;MenuItemReview&quot;)
 @RequestMapping(&quot;/api/menuitemreview&quot;)
 @RestController
-<span class="fc" id="L30">@Slf4j</span>
-<span class="fc" id="L31">public class MenuItemReviewController extends ApiController{</span>
+<span class="fc" id="L26">@Slf4j</span>
+<span class="fc" id="L27">public class MenuItemReviewController extends ApiController{</span>
     @Autowired
     MenuItemReviewRepository menuItemReviewRepository;
 
@@ -36,7 +32,7 @@ import java.time.LocalDateTime;
     @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
     @GetMapping(&quot;/all&quot;)
     public Iterable&lt;MenuItemReview&gt; allReviews() {
-<span class="fc" id="L39">        return menuItemReviewRepository.findAll();</span>
+<span class="fc" id="L35">        return menuItemReviewRepository.findAll();</span>
     }
 
     @Operation(summary= &quot;Create a new review&quot;)
@@ -52,24 +48,55 @@ import java.time.LocalDateTime;
                 // For an explanation of @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                 // See: https://www.baeldung.com/spring-date-parameters
 
-<span class="fc" id="L55">                log.info(&quot;dateReviewed={}&quot;, dateReviewed);</span>
+<span class="fc" id="L51">                log.info(&quot;dateReviewed={}&quot;, dateReviewed);</span>
 
-<span class="fc" id="L57">                MenuItemReview menuItemReview = new MenuItemReview();</span>
-<span class="fc" id="L58">                menuItemReview.setItemId(itemId);</span>
-<span class="fc" id="L59">                menuItemReview.setReviewerEmail(reviewerEmail);</span>
-<span class="fc" id="L60">                menuItemReview.setStars(stars);</span>
-<span class="fc" id="L61">                menuItemReview.setDateReviewed(dateReviewed);</span>
-<span class="fc" id="L62">                menuItemReview.setComment(comment);</span>
+<span class="fc" id="L53">                MenuItemReview menuItemReview = new MenuItemReview();</span>
+<span class="fc" id="L54">                menuItemReview.setItemId(itemId);</span>
+<span class="fc" id="L55">                menuItemReview.setReviewerEmail(reviewerEmail);</span>
+<span class="fc" id="L56">                menuItemReview.setStars(stars);</span>
+<span class="fc" id="L57">                menuItemReview.setDateReviewed(dateReviewed);</span>
+<span class="fc" id="L58">                menuItemReview.setComment(comment);</span>
 
-<span class="fc" id="L64">                return menuItemReviewRepository.save(menuItemReview);</span>
+<span class="fc" id="L60">                return menuItemReviewRepository.save(menuItemReview);</span>
             }
 
     @Operation(summary= &quot;Get a single review&quot;)
     @PreAuthorize(&quot;hasRole('ROLE_USER')&quot;)
     @GetMapping(&quot;&quot;)
     public MenuItemReview getById(@Parameter(name=&quot;id&quot;) @RequestParam Long id) {
-<span class="fc" id="L71">        return menuItemReviewRepository.findById(id)</span>
-<span class="fc" id="L72">                .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+<span class="fc" id="L67">        return menuItemReviewRepository.findById(id)</span>
+<span class="fc" id="L68">                .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+    }
+
+    @Operation(summary= &quot;Delete a MenuItemReview&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @DeleteMapping(&quot;&quot;)
+    public Object deleteMenuItemReview(@Parameter(name=&quot;id&quot;) @RequestParam Long id) {
+<span class="fc" id="L75">        MenuItemReview review = menuItemReviewRepository.findById(id)</span>
+<span class="fc" id="L76">                .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+<span class="fc" id="L77">        menuItemReviewRepository.delete(review);</span>
+<span class="fc" id="L78">        return genericMessage(&quot;MenuItemReview with id %s deleted&quot;.formatted(id));</span>
+    }
+
+    @Operation(summary= &quot;Update a single review&quot;)
+    @PreAuthorize(&quot;hasRole('ROLE_ADMIN')&quot;)
+    @PutMapping(&quot;&quot;)
+    public MenuItemReview updateMenuItemReview(
+            @Parameter(name=&quot;id&quot;, description=&quot;The id of the review you want to update&quot;) @RequestParam Long id,
+            @RequestBody @Valid MenuItemReview incoming) {
+
+<span class="fc" id="L88">        MenuItemReview review = menuItemReviewRepository.findById(id)</span>
+<span class="fc" id="L89">                .orElseThrow(() -&gt; new EntityNotFoundException(MenuItemReview.class, id));</span>
+
+<span class="fc" id="L91">        review.setItemId(incoming.getItemId());</span>
+<span class="fc" id="L92">        review.setReviewerEmail(incoming.getReviewerEmail());</span>
+<span class="fc" id="L93">        review.setStars(incoming.getStars());</span>
+<span class="fc" id="L94">        review.setDateReviewed(incoming.getDateReviewed());</span>
+<span class="fc" id="L95">        review.setComment(incoming.getComment());</span>
+
+<span class="fc" id="L97">        menuItemReviewRepository.save(review);</span>
+
+<span class="fc" id="L99">        return review;</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
